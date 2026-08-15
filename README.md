@@ -1,5 +1,34 @@
 # RGV1
 
+Ambiente de trabalho do Claude Code: a configuração versionada de MCPs, plugins
+e skills usada nas ferramentas internas da agência.
+
+## Como usar
+
+Este repositório é a **fonte da verdade**, não o lugar onde as ferramentas são
+construídas. O que está em `.claude/` e `.mcp.json` aqui tem escopo *projeto* —
+vale só dentro desta pasta. Para que valha em **todos** os seus projetos, rode:
+
+```bash
+./install.sh            # publica tudo em ~/.claude (escopo usuário)
+./install.sh --dry-run  # mostra o que faria, sem escrever
+./install.sh --force    # sobrescreve skills já existentes em ~/.claude/skills
+```
+
+É idempotente: rodar de novo não duplica nada, e por padrão não sobrescreve
+skill que já exista. Depois, reinicie o Claude Code.
+
+O arranjo pretendido:
+
+| Onde | O que |
+| --- | --- |
+| `~/.claude/` | skills, MCPs e plugins ativos — valem em qualquer projeto |
+| este repositório | a cópia versionada disso + o instalador |
+| um repo por ferramenta | os apps em si, cada um com seu deploy e histórico |
+
+Máquina nova: clone este repositório, rode `./install.sh`, cole os comandos
+`/plugin` que ele imprime no final, e o ambiente está de pé.
+
 ## MCP servers
 
 Os servidores MCP do projeto ficam em [`.mcp.json`](.mcp.json) (escopo *project*).
