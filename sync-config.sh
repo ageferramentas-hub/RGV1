@@ -2,9 +2,14 @@
 # sync-config.sh — copia a configuração deste repositório (Roger) pra raiz do
 # monorepo AGE-IA, que é o que a equipe recebe ao clonar.
 #
-#   Roger/.claude/skills/     →  AGE-IA/.claude/skills/
+#   Roger/.claude/skills/       →  AGE-IA/.claude/skills/
+#   Roger/.claude/agents/       →  AGE-IA/.claude/agents/
+#   Roger/.claude/commands/     →  AGE-IA/.claude/commands/
+#   Roger/.claude/hooks/        →  AGE-IA/.claude/hooks/
 #   Roger/.claude/settings.json →  AGE-IA/.claude/settings.json
-#   Roger/.mcp.json           →  AGE-IA/.mcp.json
+#   Roger/.mcp.json             →  AGE-IA/.mcp.json
+#
+# Pasta que não existe aqui é pulada, nunca apagada no destino.
 #
 # Uso:
 #   ./sync-config.sh <caminho-do-AGE-IA>
@@ -61,15 +66,28 @@ run() {
 printf '\n\033[1mRoger → %s\033[0m\n' "$DEST"
 
 run mkdir -p "$DEST/.claude"
-run rm -rf "$DEST/.claude/skills"
-run cp -R "$REPO_DIR/.claude/skills" "$DEST/.claude/skills"
-echo "  ~ .claude/skills/  ($(ls "$REPO_DIR/.claude/skills" | wc -l | tr -d ' ') skills)"
 
-run cp "$REPO_DIR/.claude/settings.json" "$DEST/.claude/settings.json"
-echo "  ~ .claude/settings.json"
+# Pastas de configuração. Ausente na origem = pulada, não apagada no destino.
+for dir in skills agents commands hooks; do
+  src="$REPO_DIR/.claude/$dir"
+  if [ ! -d "$src" ]; then
+    echo "  · .claude/$dir/ (não existe aqui, pulando)"
+    continue
+  fi
+  run rm -rf "$DEST/.claude/$dir"
+  run cp -R "$src" "$DEST/.claude/$dir"
+  echo "  ~ .claude/$dir/  ($(ls "$src" | wc -l | tr -d ' ') itens)"
+done
 
-run cp "$REPO_DIR/.mcp.json" "$DEST/.mcp.json"
-echo "  ~ .mcp.json"
+# Arquivos soltos.
+for f in ".claude/settings.json" ".mcp.json"; do
+  if [ ! -f "$REPO_DIR/$f" ]; then
+    echo "  · $f (não existe aqui, pulando)"
+    continue
+  fi
+  run cp "$REPO_DIR/$f" "$DEST/$f"
+  echo "  ~ $f"
+done
 
 printf '\n\033[1mPronto.\033[0m\n'
 echo "Revise e publique:"

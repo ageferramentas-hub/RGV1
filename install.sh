@@ -41,33 +41,48 @@ step() { printf '\n\033[1m%s\033[0m\n' "$*"; }
 
 # ─── 1. Skills ────────────────────────────────────────────────
 
-step "1/3  Skills → $SKILLS_DEST"
+step "1/3  Skills e agentes → $CLAUDE_HOME"
 
 run mkdir -p "$SKILLS_DEST"
 
 installed=0; skipped=0; updated=0
-for src in "$REPO_DIR"/.claude/skills/*/; do
-  [ -d "$src" ] || continue
-  name="$(basename "$src")"
-  dest="$SKILLS_DEST/$name"
 
+# Skills são pastas (.claude/skills/<nome>/SKILL.md); agentes são arquivos
+# soltos (.claude/agents/<nome>.md). Por isso os dois laços.
+copy_item() {
+  local src="$1" dest="$2" label="$3"
   if [ -e "$dest" ]; then
     if [ "$FORCE" -eq 1 ]; then
       run rm -rf "$dest"
       run cp -R "$src" "$dest"
-      say "    ~ $name (sobrescrita)"
+      say "    ~ $label (sobrescrito)"
       updated=$((updated + 1))
     else
-      say "    · $name (já existe, pulando — use --force pra sobrescrever)"
+      say "    · $label (já existe, pulando — use --force pra sobrescrever)"
       skipped=$((skipped + 1))
     fi
   else
     run cp -R "$src" "$dest"
-    say "    + $name"
+    say "    + $label"
     installed=$((installed + 1))
   fi
+}
+
+for src in "$REPO_DIR"/.claude/skills/*/; do
+  [ -d "$src" ] || continue
+  name="$(basename "$src")"
+  copy_item "$src" "$SKILLS_DEST/$name" "$name"
 done
-say "    → $installed nova(s), $updated atualizada(s), $skipped pulada(s)"
+
+if compgen -G "$REPO_DIR/.claude/agents/*.md" >/dev/null 2>&1; then
+  run mkdir -p "$CLAUDE_HOME/agents"
+  for src in "$REPO_DIR"/.claude/agents/*.md; do
+    name="$(basename "$src")"
+    copy_item "$src" "$CLAUDE_HOME/agents/$name" "agente $name"
+  done
+fi
+
+say "    → $installed novo(s), $updated atualizado(s), $skipped pulado(s)"
 
 # ─── 2. MCP servers ───────────────────────────────────────────
 

@@ -6,9 +6,20 @@ e skills usada nas ferramentas internas da agência.
 ## Como usar
 
 Este repositório é onde a configuração é **curada**, não onde as ferramentas são
-construídas. O que está em `.claude/` e `.mcp.json` aqui tem escopo *projeto* —
-vale só dentro desta pasta. Há dois caminhos pra levar isso adiante, e eles
-servem a propósitos diferentes.
+construídas:
+
+| O que você cria | Onde cria | Como chega na equipe |
+| --- | --- | --- |
+| skills, agentes, comandos, hooks, MCPs, plugins | **aqui, no Roger** | `./sync-config.sh ~/AGE/AGE-IA` |
+| apps | **direto no `AGE-IA`** | já nasce lá |
+
+App não se constrói aqui pra depois mover — nasce como pasta dentro do
+[`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA), com histórico próprio
+desde o primeiro commit.
+
+O que está em `.claude/` e `.mcp.json` aqui tem escopo *projeto* — vale só
+dentro desta pasta. Há dois caminhos pra levar isso adiante, e eles servem a
+propósitos diferentes.
 
 ### Para a equipe → `sync-config.sh`
 
