@@ -79,15 +79,47 @@ for dir in skills agents commands hooks; do
   echo "  ~ .claude/$dir/  ($(ls "$src" | wc -l | tr -d ' ') itens)"
 done
 
-# Arquivos soltos.
-for f in ".claude/settings.json" ".mcp.json"; do
-  if [ ! -f "$REPO_DIR/$f" ]; then
-    echo "  · $f (não existe aqui, pulando)"
-    continue
-  fi
-  run cp "$REPO_DIR/$f" "$DEST/$f"
-  echo "  ~ $f"
-done
+if [ -f "$REPO_DIR/.mcp.json" ]; then
+  run cp "$REPO_DIR/.mcp.json" "$DEST/.mcp.json"
+  echo "  ~ .mcp.json"
+else
+  echo "  · .mcp.json (não existe aqui, pulando)"
+fi
+
+# settings.json é MESCLADO, não sobrescrito. Daqui vêm só os marketplaces e os
+# plugins; o resto do arquivo no destino é preservado. Sobrescrever apagaria os
+# hooks do AGE-IA — foi o que matou o SessionStart do motor de carrossel uma vez.
+if [ ! -f "$REPO_DIR/.claude/settings.json" ]; then
+  echo "  · .claude/settings.json (não existe aqui, pulando)"
+elif [ "$DRY_RUN" -eq 1 ]; then
+  echo "  [dry-run] mesclar .claude/settings.json (marketplaces + plugins)"
+  echo "  ~ .claude/settings.json (mesclado)"
+else
+  ORIGEM="$REPO_DIR/.claude/settings.json" DESTINO="$DEST/.claude/settings.json" python3 - <<'PY'
+import json, os
+
+origem, destino = os.environ["ORIGEM"], os.environ["DESTINO"]
+novo = json.load(open(origem))
+
+try:
+    atual = json.load(open(destino))
+except (FileNotFoundError, json.JSONDecodeError):
+    atual = {}
+
+for chave in ("extraKnownMarketplaces", "enabledPlugins"):
+    if chave in novo:
+        atual[chave] = novo[chave]
+
+os.makedirs(os.path.dirname(destino), exist_ok=True)
+with open(destino, "w") as f:
+    json.dump(atual, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+
+preservadas = [k for k in atual if k not in ("extraKnownMarketplaces", "enabledPlugins")]
+print("  ~ .claude/settings.json (mesclado" +
+      (f"; preservado: {', '.join(preservadas)}" if preservadas else "") + ")")
+PY
+fi
 
 printf '\n\033[1mPronto.\033[0m\n'
 echo "Revise e publique:"
