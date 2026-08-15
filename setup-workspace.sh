@@ -90,3 +90,14 @@ say "Para publicar skills e MCPs no escopo de usuário (valem em todos os apps),
 say "rode dentro do Roger:"
 say ""
 say "  cd \"$WORKSPACE/Roger\" && ./install.sh"
+
+# Por último, porque é a única coisa aqui que exige ação antes do primeiro
+# commit — e o git só reclama disso quando já está atrapalhando.
+if ! git config --global user.name >/dev/null 2>&1; then
+  say ""
+  printf '\033[1m  ! Identidade do git não configurada\033[0m\n'
+  say "    Sem isso o primeiro commit falha. Configure antes:"
+  say ""
+  say "      git config --global user.name \"Roger\""
+  say "      git config --global user.email \"seu@email.com\""
+fi

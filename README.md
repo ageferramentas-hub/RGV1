@@ -1,7 +1,12 @@
 # Roger
 
-Ambiente de trabalho do Claude Code: a configuração versionada de MCPs, plugins
-e skills usada nas ferramentas internas da agência.
+Ambiente de trabalho do Claude Code de **Roger** — a configuração versionada de
+MCPs, plugins e skills usada nas ferramentas internas da
+[AGE](https://github.com/ageferramentas-hub), aceleradora de marketing.
+
+Este repositório é pessoal: é aqui que a configuração é escrita e testada antes
+de ir para a equipe. O que a equipe usa fica no
+[`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA).
 
 ## Como usar
 
