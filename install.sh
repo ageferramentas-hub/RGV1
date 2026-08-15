@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — publica a configuração do RGV1 no escopo de usuário (~/.claude),
+# install.sh — publica a configuração do Roger no escopo de usuário (~/.claude),
 # pra que skills, MCPs e plugins funcionem em TODOS os seus projetos, não só aqui.
 #
 # Uso:
@@ -77,7 +77,7 @@ if ! command -v claude >/dev/null 2>&1; then
   say "    ! CLI 'claude' não encontrada no PATH — pulando."
   say "      Instale o Claude Code e rode este script de novo."
 else
-  # Não dá pra checar com `claude mcp list`: rodando de dentro do RGV1 ele
+  # Não dá pra checar com `claude mcp list`: rodando de dentro do Roger ele
   # também lista os servidores de escopo projeto (do .mcp.json), e o script
   # pularia o registro no escopo usuário achando que já existe. Em vez disso,
   # tentamos adicionar e tratamos a falha — `claude mcp add` recusa nome

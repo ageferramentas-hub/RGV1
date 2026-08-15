@@ -1,4 +1,4 @@
-# RGV1
+# Roger
 
 Ambiente de trabalho do Claude Code: a configuração versionada de MCPs, plugins
 e skills usada nas ferramentas internas da agência.
@@ -24,38 +24,44 @@ O arranjo pretendido:
 | --- | --- |
 | `~/.claude/` | skills, MCPs e plugins ativos — valem em qualquer projeto |
 | este repositório | a cópia versionada disso + o instalador |
-| um repo por ferramenta | os apps em si, cada um com seu deploy e histórico |
+| [`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA) | monorepo dos apps — cada app é uma pasta na raiz de lá |
 
 Máquina nova: clone este repositório, rode `./install.sh`, cole os comandos
 `/plugin` que ele imprime no final, e o ambiente está de pé.
 
-## Estrutura de pastas
+## Estrutura
 
-**AGE I.A** é a mãe. No disco a pasta se chama `AGE-IA`, sem espaço nem ponto,
-pra não exigir aspas em todo caminho de terminal e script — o nome com espaço
-fica só na exibição.
+Três repositórios, lado a lado:
 
 ```
-~/AGE-IA/                     ← a mãe
-  ├── RGV1/                   ← ambiente de trabalho (este repositório)
-  ├── CLEVERTON/              ← projeto
-  ├── GERADOR-DE-CARROSSEL/   ← projeto
-  └── <novos apps>/           ← projetos
+~/AGE/
+  ├── AGE-IA/       ← monorepo dos apps
+  │     ├── GERADOR-DE-CARROSSEL/
+  │     ├── EDITOR-DE-VIDEO/
+  │     └── <novos apps>/
+  ├── Roger/        ← ambiente de trabalho (este repositório, só configuração)
+  └── Cleverton/    ← projeto
 ```
 
-O `RGV1` é o único que não é projeto: ele só guarda configuração. Nenhum código
-de app mora aqui.
+**App novo é uma pasta dentro do `AGE-IA`**, não um repositório separado:
+
+```bash
+mkdir ~/AGE/AGE-IA/EDITOR-DE-VIDEO
+```
+
+O `Roger` é o único que não é projeto — só guarda configuração. Nenhum código de
+app mora aqui.
 
 ```bash
 ./setup-workspace.sh --dry-run   # ver o que faria
-./setup-workspace.sh             # criar ~/AGE-IA e clonar os projetos
+./setup-workspace.sh             # criar ~/AGE e clonar os três repositórios
 ```
 
-Também é idempotente — projeto já clonado é pulado, nunca sobrescrito. Para usar
-outro caminho: `AGE_WORKSPACE=/onde/quiser ./setup-workspace.sh`.
+Também é idempotente — repositório já clonado é pulado, nunca sobrescrito. Para
+usar outro caminho: `AGE_WORKSPACE=/onde/quiser ./setup-workspace.sh`.
 
-Ao criar um projeto novo, adicione o repositório à lista `REPOS` no topo do
-script, no formato `nome-no-github:NOME-DA-PASTA`.
+Repositório novo (não app) entra na lista `REPOS` no topo do script, no formato
+`nome-no-github:NOME-DA-PASTA`.
 
 ## MCP servers
 
