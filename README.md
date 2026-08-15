@@ -154,9 +154,34 @@ claude mcp list
 
 ## Plugins
 
-Configurados em [`.claude/settings.json`](.claude/settings.json). O marketplace é
-registrado e o plugin habilitado automaticamente assim que você confia na pasta
-do projeto — sem precisar rodar os comandos `/plugin` à mão.
+Configurados em [`.claude/settings.json`](.claude/settings.json). A intenção é
+que o marketplace se registre e o plugin habilite sozinho assim que você confia
+na pasta do projeto, sem rodar `/plugin` à mão.
+
+> ⚠️ **Confira antes de contar com eles.** Numa sessão remota de teste,
+> `enabledPlugins` **não instalou nenhum** dos quatro: o
+> `~/.claude/plugins/installed_plugins.json` ficou vazio e só um dos quatro
+> marketplaces foi baixado. A causa provável é a falta do passo interativo de
+> confiança, que numa sessão remota ninguém responde — em máquina local, com o
+> prompt aparecendo, tende a funcionar.
+>
+> Verifique com `/plugin` depois de reiniciar. Se a lista vier vazia, instale à
+> mão (uma vez por máquina, vale pra todos os projetos):
+>
+> ```
+> /plugin marketplace add bradautomates/claude-video
+> /plugin marketplace add obra/superpowers
+> /plugin marketplace add charlie947/social-media-skills
+> /plugin marketplace add anthropics/claude-plugins-official
+>
+> /plugin install watch@claude-video
+> /plugin install superpowers@superpowers-dev
+> /plugin install social-media-skills@social-media-skills
+> /plugin install stripe@claude-plugins-official
+> ```
+>
+> Skills copiadas em `.claude/skills/` não têm esse problema: carregam sempre.
+> É por isso que o `brainstorming` está copiado, e não só habilitado via plugin.
 
 | Plugin | O que faz |
 | --- | --- |
@@ -183,7 +208,7 @@ faixa de legenda nenhuma.
 
 Ficam em `.claude/skills/`. Carregam sozinhas ao abrir o projeto — nada a instalar.
 
-São 28 no total, 5,7 MB. Todas **copiadas** pra cá — os repositórios de origem ou
+São 29 no total, 5,8 MB. Todas **copiadas** pra cá — os repositórios de origem ou
 não publicam `marketplace.json`, ou publicam mas você pediu skills específicas
 em vez do pacote inteiro. Por isso **nenhuma recebe atualização automática**:
 pra atualizar, recopie a pasta do upstream. Os plugins da seção acima, esses
@@ -244,11 +269,16 @@ sim, se atualizam sozinhos.
 - `webapp-testing`: Playwright.
 - `docx`, `pdf`: Python 3.
 
-### Duplicatas
+### Processo
 
-- **`brainstorming`** você pediu via `npx skills add`, mas ele **já vem** no
-  plugin `superpowers@superpowers-dev` instalado acima. Copiar de novo criaria
-  duas cópias da mesma skill, então não copiei.
+| Skill | Origem | O que faz |
+| --- | --- | --- |
+| `brainstorming` | [`obra/superpowers`](https://github.com/obra/superpowers) @ `b36e082` | Entrevista você até a ideia virar spec antes de qualquer código. Invoque por `/brainstorming` |
+
+Esta skill também vem dentro do plugin `superpowers`. Está copiada aqui porque
+a via do plugin não se provou confiável — veja a seção de plugins acima.
+
+### Duplicatas
 - **`docx` e `pdf`** já existem como skills embutidas do Claude Code. As cópias
   aqui são de projeto e têm precedência sobre as embutidas — instalei porque
   você pediu explicitamente, mas dá pra remover sem perder a funcionalidade.
