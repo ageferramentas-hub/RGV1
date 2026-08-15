@@ -25,7 +25,7 @@ propósitos diferentes.
 
 O que a equipe usa mora na raiz do
 [`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA). Quem clona aquele
-repositório recebe as 28 skills, os 4 plugins e os 3 MCPs sem rodar nada, e vale
+repositório recebe as 37 skills e os 3 MCPs sem rodar nada, e isso vale
 em qualquer app de lá. Depois de editar a configuração aqui:
 
 ```bash
@@ -65,8 +65,8 @@ O arranjo pretendido:
 | este repositório | a cópia versionada disso + o instalador |
 | [`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA) | monorepo dos apps — cada app é uma pasta na raiz de lá |
 
-Máquina nova: clone este repositório, rode `./install.sh`, cole os comandos
-`/plugin` que ele imprime no final, e o ambiente está de pé.
+Máquina nova: clone este repositório e rode `./setup-workspace.sh`. Se quiser as
+skills fora do AGE-IA também, rode `./install.sh` — mas leia o aviso acima antes.
 
 ## Estrutura
 
@@ -76,7 +76,7 @@ Três repositórios, lado a lado:
 ~/AGE/
   ├── AGE-IA/       ← monorepo dos apps
   │     ├── GERADOR-DE-CARROSSEL/
-  │     ├── EDITOR-DE-VIDEO/
+  │     ├── AGE-WORKSPACE/
   │     └── <novos apps>/
   ├── Roger/        ← ambiente de trabalho (este repositório, só configuração)
   └── Cleverton/    ← projeto
@@ -85,7 +85,7 @@ Três repositórios, lado a lado:
 **App novo é uma pasta dentro do `AGE-IA`**, não um repositório separado:
 
 ```bash
-mkdir ~/AGE/AGE-IA/EDITOR-DE-VIDEO
+mkdir ~/AGE/AGE-IA/EDITOR-DE-VIDEO   # exemplo
 ```
 
 O `Roger` é o único que não é projeto — só guarda configuração. Nenhum código de
@@ -169,7 +169,7 @@ na pasta do projeto, sem rodar `/plugin` à mão.
 >
 > | Plugin | O que veio por cópia | Onde |
 > | --- | --- | --- |
-> | `superpowers` | as 14 skills | raiz |
+> | `superpowers` | 12 das 14 skills | raiz |
 > | `watch@claude-video` | a skill `watch` | raiz |
 > | `social-media-skills` | as 17 skills | `AGE-IA/GERADOR-DE-CARROSSEL/` |
 > | `stripe` | nada | — |
@@ -207,7 +207,7 @@ faixa de legenda nenhuma.
 
 Ficam em `.claude/skills/`. Carregam sozinhas ao abrir o projeto — nada a instalar.
 
-São 43 no total, 6,3 MB. Todas **copiadas** pra cá — os repositórios de origem ou
+São 37 no total, 4,8 MB. Todas **copiadas** pra cá — os repositórios de origem ou
 não publicam `marketplace.json`, ou publicam mas você pediu skills específicas
 em vez do pacote inteiro. Por isso **nenhuma recebe atualização automática**:
 pra atualizar, recopie a pasta do upstream. Os plugins da seção acima, esses
@@ -228,7 +228,6 @@ sim, se atualizam sozinhos.
 | --- | --- | --- |
 | `remotion-*` (12 skills) | [`remotion-dev/skills`](https://github.com/remotion-dev/skills) @ `9f0faa5` | Vídeo programático com [Remotion](https://www.remotion.dev). Entre por `remotion-best-practices`, que roteia pras demais |
 | `ai-image-generation` | [`inference-sh/skills`](https://github.com/inference-sh/skills) @ `becc256` | Geração de imagem com FLUX, GPT-Image-2, Gemini, Seedream e +50 modelos via CLI da inference.sh |
-| `nano-banana-2` | `inference-sh/skills` @ `becc256` | Gemini 3.1 Flash Image (Nano Banana 2): text-to-image, edição, até 14 imagens de entrada |
 | `ai-video-generation` | `inference-sh/skills` @ `becc256` | Vídeo com Veo 3.1, Seedance 2.0, Wan, Grok e +40 modelos |
 
 ### Backend, dados e infra
@@ -250,10 +249,7 @@ sim, se atualizam sozinhos.
 
 | Skill | Origem | O que faz |
 | --- | --- | --- |
-| `docx` | `anthropics/skills` @ `f6656c1` | Criar, ler e editar `.docx` / `.dotx` |
-| `pdf` | `anthropics/skills` @ `f6656c1` | Ler, extrair, juntar, dividir, preencher formulário e OCR em PDF |
 | `skill-creator` | `anthropics/skills` @ `f6656c1` | Criar, editar e medir performance de skills — inclusive as deste repo |
-| `find-skills` | [`vercel-labs/skills`](https://github.com/vercel-labs/skills) @ `c6f69c6` | Descobre e instala skills quando você pergunta "existe uma skill pra X?" |
 
 ### Dependências
 
@@ -270,7 +266,7 @@ sim, se atualizam sozinhos.
 
 ### Processo de engenharia
 
-As 14 do [`obra/superpowers`](https://github.com/obra/superpowers) @ `b36e082`,
+As 12 do [`obra/superpowers`](https://github.com/obra/superpowers) @ `b36e082`,
 copiadas porque a rota de plugin não funciona na web:
 
 | Skill | O que faz |
@@ -285,8 +281,6 @@ copiadas porque a rota de plugin não funciona na web:
 | `using-git-worktrees` | Isola o trabalho numa worktree |
 | `subagent-driven-development` / `dispatching-parallel-agents` | Divide tarefas independentes entre agentes |
 | `finishing-a-development-branch` | Fecha e integra a branch |
-| `writing-skills` | Cria e valida skill nova |
-| `using-superpowers` | Roteador do conjunto |
 
 ### Vídeo
 
@@ -294,10 +288,29 @@ copiadas porque a rota de plugin não funciona na web:
 | --- | --- | --- |
 | `watch` | [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video) | `/watch <url> <pergunta>` — baixa com `yt-dlp`, extrai frames com `ffmpeg`, transcreve por legenda. Precisa de `ffmpeg` e `yt-dlp` |
 
-### Duplicatas
-- **`docx` e `pdf`** já existem como skills embutidas do Claude Code. As cópias
-  aqui são de projeto e têm precedência sobre as embutidas — instalei porque
-  você pediu explicitamente, mas dá pra remover sem perder a funcionalidade.
+### Removidas por redundância
+
+Seis skills foram instaladas e depois tiradas. Cada descrição entra no contexto
+toda sessão, e duas skills parecidas fazem o modelo escolher pior — cortar é
+ganho, não perda.
+
+| Removida | Motivo |
+| --- | --- |
+| `docx`, `pdf` | Já existem embutidas no Claude Code. A cópia de projeto vencia a embutida sem acrescentar nada |
+| `nano-banana-2` | É um único modelo (Gemini 3.1 Flash Image) que o `ai-image-generation` já cobre entre os 50+ dele |
+| `writing-skills` | Mesmo trabalho do `skill-creator`, que é mais completo (tem eval e benchmark) |
+| `using-superpowers` | Roteador do pacote superpowers, feito para o plugin. Solto, exige invocar skill antes de qualquer resposta — atrito em toda conversa, sem ganho |
+| `find-skills` | Descobre e instala skills, mas a rota de instalação não funciona neste ambiente e tudo já está copiado |
+
+Duas que **pareciam** duplicadas e ficaram: `dispatching-parallel-agents` (várias
+falhas independentes em paralelo) e `subagent-driven-development` (executar um
+plano em sequência, um subagente por tarefa). São trabalhos diferentes.
+
+### A avaliar
+
+As **12 skills `remotion-*`** são 32% do total e nenhum app usa Remotion ainda.
+Quando o app de vídeo existir, o lugar delas é dentro da pasta dele — não na
+raiz, onde pesam em toda sessão de todo app.
 
 ## gstack
 
