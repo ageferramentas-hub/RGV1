@@ -76,6 +76,27 @@ Transcrição sai de graça quando o vídeo tem legenda — a maioria dos públi
 Só cai no fallback Whisper (que pede chave da Groq ou da OpenAI) em vídeo sem
 faixa de legenda nenhuma.
 
+## Skills
+
+Ficam em `.claude/skills/`. Carregam sozinhas ao abrir o projeto — nada a instalar.
+
+| Skill | O que faz |
+| --- | --- |
+| [`web-artifacts-builder`](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder) | Monta artifacts da claude.ai grandes e multi-componente com React 18 + TypeScript + Vite + Tailwind + shadcn/ui, e empacota tudo num HTML único e autocontido |
+
+Oficial da Anthropic ([`anthropics/skills`](https://github.com/anthropics/skills)),
+copiada do commit `f6656c1`. Como é uma cópia versionada aqui, não recebe
+atualização automática — pra atualizar, recopie a pasta do repositório upstream.
+
+Ela dispara sozinha quando o artifact pede estado, roteamento ou componentes
+shadcn. Para um HTML/JSX de arquivo único ela não entra — e isso é intencional.
+
+### Dependências
+
+Node 18+ e `pnpm` (o `init-artifact.sh` instala o pnpm sozinho via `npm i -g`
+se não achar). O script baixa bastante coisa na primeira execução: Vite,
+Tailwind, ~26 pacotes Radix e mais.
+
 ### Não instalados (são pagos)
 
 Ficaram de fora por exigirem conta e API key:
