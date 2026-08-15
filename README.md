@@ -61,6 +61,7 @@ do projeto — sem precisar rodar os comandos `/plugin` à mão.
 | [`watch@claude-video`](https://github.com/bradautomates/claude-video) | `/watch <url-ou-caminho> <pergunta>` — dá input de vídeo pro Claude: baixa com `yt-dlp`, extrai frames com `ffmpeg`, transcreve por legenda ou Whisper |
 | [`superpowers@superpowers-dev`](https://github.com/obra/superpowers) | 14 skills de processo de engenharia: brainstorming, TDD, debug sistemático, escrever/executar planos, code review, git worktrees, agentes em paralelo |
 | [`social-media-skills@social-media-skills`](https://github.com/charlie947/social-media-skills) | 17 skills de conteúdo do sistema do Charlie Hills: voz, LinkedIn, Reels, thumbnails de YouTube, hooks, carrosséis, analytics |
+| [`stripe@claude-plugins-official`](https://github.com/stripe/ai/tree/main/providers/claude/plugin) | 8 skills da Stripe, entre elas `stripe-best-practices`, além de `stripe-docs`, `stripe-apps` e `upgrade-stripe` |
 
 ### Dependências do `/watch`
 
@@ -80,23 +81,75 @@ faixa de legenda nenhuma.
 
 Ficam em `.claude/skills/`. Carregam sozinhas ao abrir o projeto — nada a instalar.
 
+São 28 no total, 5,7 MB. Todas **copiadas** pra cá — os repositórios de origem ou
+não publicam `marketplace.json`, ou publicam mas você pediu skills específicas
+em vez do pacote inteiro. Por isso **nenhuma recebe atualização automática**:
+pra atualizar, recopie a pasta do upstream. Os plugins da seção acima, esses
+sim, se atualizam sozinhos.
+
+### Design e frontend
+
 | Skill | Origem | O que faz |
 | --- | --- | --- |
-| [`web-artifacts-builder`](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder) | `anthropics/skills` @ `f6656c1` | Monta artifacts da claude.ai grandes e multi-componente com React 18 + TypeScript + Vite + Tailwind + shadcn/ui, e empacota tudo num HTML único e autocontido |
-| `remotion-*` (12 skills) | [`remotion-dev/skills`](https://github.com/remotion-dev/skills) @ `9f0faa5` | Vídeo programático com [Remotion](https://www.remotion.dev): criar, renderizar, legendas, mapas, animação, interatividade, multimídia, Studio, upgrade. Entre por `remotion-best-practices`, que roteia pras demais |
+| `web-artifacts-builder` | `anthropics/skills` @ `f6656c1` | Artifacts da claude.ai multi-componente com React 18 + TS + Vite + Tailwind + shadcn/ui, empacotados num HTML único |
+| `frontend-design` | `anthropics/skills` @ `f6656c1` | Direção visual, tipografia e escolhas estéticas que não parecem template |
+| `shadcn` | [`shadcn-ui/ui`](https://github.com/shadcn-ui/ui) @ `d4fc45b` | Adiciona, busca, corrige e compõe componentes shadcn/ui; entende `components.json`, registries e presets |
+| `web-design-guidelines` | [`vercel-labs/agent-skills`](https://github.com/vercel-labs/agent-skills) @ `b8caa26` | Audita código de UI contra as Web Interface Guidelines (acessibilidade, UX) |
 
-Nenhum dos dois repositórios publica `marketplace.json`, então as skills estão
-copiadas aqui e **não recebem atualização automática** — pra atualizar, recopie
-as pastas do upstream. Os plugins da seção acima, esses sim, se atualizam
-sozinhos.
+### Vídeo, imagem e mídia
+
+| Skill | Origem | O que faz |
+| --- | --- | --- |
+| `remotion-*` (12 skills) | [`remotion-dev/skills`](https://github.com/remotion-dev/skills) @ `9f0faa5` | Vídeo programático com [Remotion](https://www.remotion.dev). Entre por `remotion-best-practices`, que roteia pras demais |
+| `ai-image-generation` | [`inference-sh/skills`](https://github.com/inference-sh/skills) @ `becc256` | Geração de imagem com FLUX, GPT-Image-2, Gemini, Seedream e +50 modelos via CLI da inference.sh |
+| `nano-banana-2` | `inference-sh/skills` @ `becc256` | Gemini 3.1 Flash Image (Nano Banana 2): text-to-image, edição, até 14 imagens de entrada |
+| `ai-video-generation` | `inference-sh/skills` @ `becc256` | Vídeo com Veo 3.1, Seedance 2.0, Wan, Grok e +40 modelos |
+
+### Backend, dados e infra
+
+| Skill | Origem | O que faz |
+| --- | --- | --- |
+| `supabase-postgres-best-practices` | [`supabase/agent-skills`](https://github.com/supabase/agent-skills) @ `8331f91` | Regras de Postgres: schema, migrations, RLS, índices, pgvector, diagnóstico de query lenta |
+| `mcp-builder` | `anthropics/skills` @ `f6656c1` | Construir servidores MCP em Python (FastMCP) ou Node/TS |
+| `webapp-testing` | `anthropics/skills` @ `f6656c1` | Testa webapp local com Playwright: screenshots, logs do browser, verificação de UI |
+
+### Marketing e conteúdo
+
+| Skill | Origem | O que faz |
+| --- | --- | --- |
+| `copywriting` | [`coreyhaines31/marketingskills`](https://github.com/coreyhaines31/marketingskills) @ `7868cb9` | Copy de homepage, landing, pricing, features — headline, CTA, proposta de valor |
+| `content-strategy` | `coreyhaines31/marketingskills` @ `7868cb9` | Decide *o que* produzir: pilares, clusters de tópico, calendário editorial |
+
+### Documentos e meta
+
+| Skill | Origem | O que faz |
+| --- | --- | --- |
+| `docx` | `anthropics/skills` @ `f6656c1` | Criar, ler e editar `.docx` / `.dotx` |
+| `pdf` | `anthropics/skills` @ `f6656c1` | Ler, extrair, juntar, dividir, preencher formulário e OCR em PDF |
+| `skill-creator` | `anthropics/skills` @ `f6656c1` | Criar, editar e medir performance de skills — inclusive as deste repo |
+| `find-skills` | [`vercel-labs/skills`](https://github.com/vercel-labs/skills) @ `c6f69c6` | Descobre e instala skills quando você pergunta "existe uma skill pra X?" |
 
 ### Dependências
 
 - `web-artifacts-builder`: Node 18+ e `pnpm` (o `init-artifact.sh` instala o
   pnpm sozinho via `npm i -g` se não achar). A primeira execução baixa Vite,
   Tailwind e ~26 pacotes Radix.
-- `remotion-*`: um projeto Remotion (Node 18+). As skills são documentação e
-  padrões — não instalam nada por conta própria.
+- `remotion-*`: um projeto Remotion (Node 18+). São documentação e padrões —
+  não instalam nada por conta própria.
+- `ai-image-generation`, `nano-banana-2`, `ai-video-generation`: CLI da
+  [inference.sh](https://inference.sh) e **conta com créditos**. As skills em si
+  são grátis; os modelos que elas chamam são cobrados por geração.
+- `webapp-testing`: Playwright.
+- `docx`, `pdf`: Python 3.
+
+### Duplicatas
+
+- **`brainstorming`** você pediu via `npx skills add`, mas ele **já vem** no
+  plugin `superpowers@superpowers-dev` instalado acima. Copiar de novo criaria
+  duas cópias da mesma skill, então não copiei.
+- **`docx` e `pdf`** já existem como skills embutidas do Claude Code. As cópias
+  aqui são de projeto e têm precedência sobre as embutidas — instalei porque
+  você pediu explicitamente, mas dá pra remover sem perder a funcionalidade.
 
 ## gstack
 
@@ -123,10 +176,6 @@ não é o que está configurado. Para mudar:
 ```
 
 ## Não instalado
-
-- **[`corethaines31/marketingskills`](https://github.com/corethaines31/marketingskills)**
-  — o repositório retorna **404**. Ou não existe, ou é privado, ou a URL tem um
-  typo. Confirme o endereço.
 
 ### Pagos (ficaram de fora por exigirem conta e API key)
 

@@ -17,11 +17,18 @@
         "source": "github",
         "repo": "charlie947/social-media-skills"
       }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
     }
   },
   "enabledPlugins": {
     "watch@claude-video": true,
     "superpowers@superpowers-dev": true,
-    "social-media-skills@social-media-skills": true
+    "social-media-skills@social-media-skills": true,
+    "stripe@claude-plugins-official": true
   }
 }
