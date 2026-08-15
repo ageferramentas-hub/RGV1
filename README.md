@@ -158,30 +158,29 @@ Configurados em [`.claude/settings.json`](.claude/settings.json). A intenção �
 que o marketplace se registre e o plugin habilite sozinho assim que você confia
 na pasta do projeto, sem rodar `/plugin` à mão.
 
-> ⚠️ **Confira antes de contar com eles.** Numa sessão remota de teste,
-> `enabledPlugins` **não instalou nenhum** dos quatro: o
+> ⚠️ **Plugin não funciona no Claude Code na web.** O comando `/plugin` nem
+> existe lá — responde `/plugin isn't available in this environment.` E o
+> `enabledPlugins` também não resolve sozinho: numa sessão remota de teste o
 > `~/.claude/plugins/installed_plugins.json` ficou vazio e só um dos quatro
-> marketplaces foi baixado. A causa provável é a falta do passo interativo de
-> confiança, que numa sessão remota ninguém responde — em máquina local, com o
-> prompt aparecendo, tende a funcionar.
+> marketplaces foi baixado.
 >
-> Verifique com `/plugin` depois de reiniciar. Se a lista vier vazia, instale à
-> mão (uma vez por máquina, vale pra todos os projetos):
+> Por isso **o conteúdo destes plugins está copiado como skill**, que é a rota
+> que funciona em qualquer ambiente:
 >
-> ```
-> /plugin marketplace add bradautomates/claude-video
-> /plugin marketplace add obra/superpowers
-> /plugin marketplace add charlie947/social-media-skills
-> /plugin marketplace add anthropics/claude-plugins-official
+> | Plugin | O que veio por cópia | Onde |
+> | --- | --- | --- |
+> | `superpowers` | as 14 skills | raiz |
+> | `watch@claude-video` | a skill `watch` | raiz |
+> | `social-media-skills` | as 17 skills | `AGE-IA/GERADOR-DE-CARROSSEL/` |
+> | `stripe` | nada | — |
 >
-> /plugin install watch@claude-video
-> /plugin install superpowers@superpowers-dev
-> /plugin install social-media-skills@social-media-skills
-> /plugin install stripe@claude-plugins-official
-> ```
+> O `stripe` ficou de fora porque não há cobrança em nenhum app ainda; são 8
+> skills que só somariam ruído. Quando entrar pagamento, é só pedir.
 >
-> Skills copiadas em `.claude/skills/` não têm esse problema: carregam sempre.
-> É por isso que o `brainstorming` está copiado, e não só habilitado via plugin.
+> As entradas continuam no `settings.json` porque no CLI e no desktop elas
+> funcionam, e lá dão atualização automática. Se você usar por lá, rode
+> `/plugin` e confira — havendo plugin e cópia ao mesmo tempo, a skill copiada
+> na raiz é a que vale, e a do plugin fica inerte.
 
 | Plugin | O que faz |
 | --- | --- |
@@ -208,7 +207,7 @@ faixa de legenda nenhuma.
 
 Ficam em `.claude/skills/`. Carregam sozinhas ao abrir o projeto — nada a instalar.
 
-São 29 no total, 5,8 MB. Todas **copiadas** pra cá — os repositórios de origem ou
+São 43 no total, 6,3 MB. Todas **copiadas** pra cá — os repositórios de origem ou
 não publicam `marketplace.json`, ou publicam mas você pediu skills específicas
 em vez do pacote inteiro. Por isso **nenhuma recebe atualização automática**:
 pra atualizar, recopie a pasta do upstream. Os plugins da seção acima, esses
@@ -269,14 +268,31 @@ sim, se atualizam sozinhos.
 - `webapp-testing`: Playwright.
 - `docx`, `pdf`: Python 3.
 
-### Processo
+### Processo de engenharia
+
+As 14 do [`obra/superpowers`](https://github.com/obra/superpowers) @ `b36e082`,
+copiadas porque a rota de plugin não funciona na web:
+
+| Skill | O que faz |
+| --- | --- |
+| `brainstorming` | Entrevista você até a ideia virar spec, antes de qualquer código |
+| `writing-plans` | Vira spec em plano de passos |
+| `executing-plans` | Executa um plano com checkpoints de revisão |
+| `test-driven-development` | Teste antes da implementação |
+| `systematic-debugging` | Método para bug e teste quebrado, antes de propor conserto |
+| `requesting-code-review` / `receiving-code-review` | Pedir e receber revisão sem concordância performática |
+| `verification-before-completion` | Proíbe dizer "pronto" sem rodar a verificação |
+| `using-git-worktrees` | Isola o trabalho numa worktree |
+| `subagent-driven-development` / `dispatching-parallel-agents` | Divide tarefas independentes entre agentes |
+| `finishing-a-development-branch` | Fecha e integra a branch |
+| `writing-skills` | Cria e valida skill nova |
+| `using-superpowers` | Roteador do conjunto |
+
+### Vídeo
 
 | Skill | Origem | O que faz |
 | --- | --- | --- |
-| `brainstorming` | [`obra/superpowers`](https://github.com/obra/superpowers) @ `b36e082` | Entrevista você até a ideia virar spec antes de qualquer código. Invoque por `/brainstorming` |
-
-Esta skill também vem dentro do plugin `superpowers`. Está copiada aqui porque
-a via do plugin não se provou confiável — veja a seção de plugins acima.
+| `watch` | [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video) | `/watch <url> <pergunta>` — baixa com `yt-dlp`, extrai frames com `ffmpeg`, transcreve por legenda. Precisa de `ffmpeg` e `yt-dlp` |
 
 ### Duplicatas
 - **`docx` e `pdf`** já existem como skills embutidas do Claude Code. As cópias
