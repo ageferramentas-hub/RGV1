@@ -5,9 +5,23 @@
         "source": "github",
         "repo": "bradautomates/claude-video"
       }
+    },
+    "superpowers-dev": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers"
+      }
+    },
+    "social-media-skills": {
+      "source": {
+        "source": "github",
+        "repo": "charlie947/social-media-skills"
+      }
     }
   },
   "enabledPlugins": {
-    "watch@claude-video": true
+    "watch@claude-video": true,
+    "superpowers@superpowers-dev": true,
+    "social-media-skills@social-media-skills": true
   }
 }
