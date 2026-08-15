@@ -5,18 +5,46 @@ e skills usada nas ferramentas internas da agência.
 
 ## Como usar
 
-Este repositório é a **fonte da verdade**, não o lugar onde as ferramentas são
+Este repositório é onde a configuração é **curada**, não onde as ferramentas são
 construídas. O que está em `.claude/` e `.mcp.json` aqui tem escopo *projeto* —
-vale só dentro desta pasta. Para que valha em **todos** os seus projetos, rode:
+vale só dentro desta pasta. Há dois caminhos pra levar isso adiante, e eles
+servem a propósitos diferentes.
+
+### Para a equipe → `sync-config.sh`
+
+O que a equipe usa mora na raiz do
+[`AGE-IA`](https://github.com/ageferramentas-hub/AGE-IA). Quem clona aquele
+repositório recebe as 28 skills, os 4 plugins e os 3 MCPs sem rodar nada, e vale
+em qualquer app de lá. Depois de editar a configuração aqui:
 
 ```bash
-./install.sh            # publica tudo em ~/.claude (escopo usuário)
-./install.sh --dry-run  # mostra o que faria, sem escrever
-./install.sh --force    # sobrescreve skills já existentes em ~/.claude/skills
+./sync-config.sh ~/AGE/AGE-IA --dry-run   # ver o que mudaria
+./sync-config.sh ~/AGE/AGE-IA             # copiar
 ```
 
-É idempotente: rodar de novo não duplica nada, e por padrão não sobrescreve
-skill que já exista. Depois, reinicie o Claude Code.
+Ele só copia — não faz commit nem push. Revise com `git diff` no AGE-IA e
+publique de lá. E recusa qualquer destino cujo `origin` não seja o AGE-IA, pra
+não sobrescrever a configuração do repositório errado.
+
+### Só pra você → `install.sh`
+
+Publica a configuração em `~/.claude` (escopo usuário), fazendo valer em **toda**
+pasta da sua máquina, inclusive fora do AGE-IA:
+
+```bash
+./install.sh            # instala
+./install.sh --dry-run  # mostra o que faria, sem escrever
+./install.sh --force    # sobrescreve skills já existentes
+```
+
+É idempotente e, por padrão, não sobrescreve skill existente. Depois, reinicie o
+Claude Code.
+
+⚠️ **Não use os dois pro mesmo conjunto de skills.** O escopo pessoal
+(`~/.claude/skills/`) **vence** o do projeto. Se você rodar o `install.sh` e
+depois a equipe atualizar uma skill no AGE-IA, você continua na versão antiga
+sem nenhum aviso. Escolha um: `install.sh` se trabalha sozinho fora do AGE-IA,
+`sync-config.sh` se trabalha em equipe dentro dele.
 
 O arranjo pretendido:
 
