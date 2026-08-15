@@ -50,6 +50,32 @@ claude mcp list
   teste de ponta a ponta; Chrome DevTools para inspecionar o que já está aberto
   na sua aba (console, requests, performance).
 
+## Plugins
+
+Configurados em [`.claude/settings.json`](.claude/settings.json). O marketplace é
+registrado e o plugin habilitado automaticamente assim que você confia na pasta
+do projeto — sem precisar rodar os comandos `/plugin` à mão.
+
+| Plugin | Comando | O que faz |
+| --- | --- | --- |
+| [`watch@claude-video`](https://github.com/bradautomates/claude-video) | `/watch` | Dá input de vídeo pro Claude: baixa com `yt-dlp`, extrai frames com `ffmpeg`, transcreve por legenda ou Whisper, e entrega tudo pro modelo |
+
+Uso: `/watch <url-ou-caminho> <sua pergunta>`.
+
+### Dependências do `/watch`
+
+Precisa de `ffmpeg` e `yt-dlp` na máquina. No macOS o plugin instala sozinho via
+Homebrew na primeira execução; no Linux/Windows ele imprime o comando exato.
+No Debian/Ubuntu:
+
+```bash
+sudo apt install ffmpeg && pipx install yt-dlp
+```
+
+Transcrição sai de graça quando o vídeo tem legenda — a maioria dos públicos tem.
+Só cai no fallback Whisper (que pede chave da Groq ou da OpenAI) em vídeo sem
+faixa de legenda nenhuma.
+
 ### Não instalados (são pagos)
 
 Ficaram de fora por exigirem conta e API key:
