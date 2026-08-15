@@ -29,6 +29,34 @@ O arranjo pretendido:
 Máquina nova: clone este repositório, rode `./install.sh`, cole os comandos
 `/plugin` que ele imprime no final, e o ambiente está de pé.
 
+## Estrutura de pastas
+
+**AGE I.A** é a mãe. No disco a pasta se chama `AGE-IA`, sem espaço nem ponto,
+pra não exigir aspas em todo caminho de terminal e script — o nome com espaço
+fica só na exibição.
+
+```
+~/AGE-IA/                     ← a mãe
+  ├── RGV1/                   ← ambiente de trabalho (este repositório)
+  ├── CLEVERTON/              ← projeto
+  ├── GERADOR-DE-CARROSSEL/   ← projeto
+  └── <novos apps>/           ← projetos
+```
+
+O `RGV1` é o único que não é projeto: ele só guarda configuração. Nenhum código
+de app mora aqui.
+
+```bash
+./setup-workspace.sh --dry-run   # ver o que faria
+./setup-workspace.sh             # criar ~/AGE-IA e clonar os projetos
+```
+
+Também é idempotente — projeto já clonado é pulado, nunca sobrescrito. Para usar
+outro caminho: `AGE_WORKSPACE=/onde/quiser ./setup-workspace.sh`.
+
+Ao criar um projeto novo, adicione o repositório à lista `REPOS` no topo do
+script, no formato `nome-no-github:NOME-DA-PASTA`.
+
 ## MCP servers
 
 Os servidores MCP do projeto ficam em [`.mcp.json`](.mcp.json) (escopo *project*).
